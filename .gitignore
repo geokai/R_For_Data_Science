@@ -1,0 +1,8 @@
+# Directories:
+2008\ posters
+
+# Files:
+*.csv
+*.mpy
+*.pyc
+.Rhistory
