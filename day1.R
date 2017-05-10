@@ -6,7 +6,7 @@
 
 
 # Importing the data into a dataframe (variable)
-my_DF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro to R for Data Science/2008.csv")
+my_DF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro_to_R_for_Data_Science/2008.csv")
 
 # printing to console the first 6 lines of the dataset
 head(my_DF)
@@ -136,4 +136,24 @@ table(floor(ATL_LAX$DepTime/100))
 # plot on an houly basis
 plot(table(floor(ATL_LAX$DepTime/100)))
 # the number of flights for a particular hour
+
+# Build a table that shows how many cities are the origin
+# for the flights throughout 2008
+table(my_DF$Origin)
+# Sort the results, and see that Atlanta is most often used
+# as a city of origin for flights
+sort(table(my_DF$Origin))
+
+# here are some sample departure times
+head(my_DF$DepTime)
+# we might want to break up into these catagories
+seq(0, 2400, by=100)
+# Enumerates the number of flights that departed within
+# each hour range during the course of the day
+cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab = 4, labels = NULL)
+table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab = 4))
+# Here is the coresponding plot
+# and we will improve the way the x-axis looks later
+# 'las = 2' rotates the axos lables through 90 degrees
+plot(table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab=4)), las = 2)
 
