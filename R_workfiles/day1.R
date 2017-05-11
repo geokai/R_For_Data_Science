@@ -1,6 +1,6 @@
 # George Kaimakis
 # 07 May 2017
-# My first R file (week 1)
+# My 1st R file (week 1)
 
 ?read.csv
 
@@ -164,13 +164,12 @@ plot(table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab=4)), las = 2)
 # then sort the table, and find which are the most popular
 # such pairs, by examining only the tail
 # Here are the most popular 20 such pairs.
-tail(sort(table(paste(my_DF$Origin, "to", my_DF$Dest)), decreasing = TRUE), 20)
+head(sort(table(paste(my_DF$Origin, "to", my_DF$Dest)), decreasing = TRUE), 20)
 
 
 # Find how many origin-destination paths were flown only once each
 # table(paste(my_DF$Origin, "to", my_DF$Dest)) - all of these that evaluate to 1
 
 sum(table(paste(my_DF$Origin, "to", my_DF$Dest)) == 1)
-
 
 
