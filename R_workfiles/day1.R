@@ -6,7 +6,7 @@
 
 
 # Importing the data into a dataframe (variable)
-my_DF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro_to_R_for_Data_Science/2008.csv")
+my_DF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro_to_R_for_Data_Science/datasets/2008.csv")
 
 # printing to console the first 6 lines of the dataset
 head(my_DF)
@@ -156,4 +156,21 @@ table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab = 4))
 # and we will improve the way the x-axis looks later
 # 'las = 2' rotates the axos lables through 90 degrees
 plot(table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab=4)), las = 2)
+
+#head(my_DF$Origin)
+#head(my_DF$Dest)
+
+# Make a table of all the origin-to-destination pairs
+# then sort the table, and find which are the most popular
+# such pairs, by examining only the tail
+# Here are the most popular 20 such pairs.
+tail(sort(table(paste(my_DF$Origin, "to", my_DF$Dest)), decreasing = TRUE), 20)
+
+
+# Find how many origin-destination paths were flown only once each
+# table(paste(my_DF$Origin, "to", my_DF$Dest)) - all of these that evaluate to 1
+
+sum(table(paste(my_DF$Origin, "to", my_DF$Dest)) == 1)
+
+
 
