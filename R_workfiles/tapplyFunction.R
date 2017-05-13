@@ -5,12 +5,6 @@
 # Importing the data into a dataframe (variable)
 my_DF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro_to_R_for_Data_Science/datasets/2008.csv")
 
-# a listing of carriers
-carriers <- read.csv("../datasets/carriers.csv")
-
-# print the carriers
-carriers$Code["HA"]
-
 # printing to console the first 6 lines of the dataset
 head(my_DF)
 
@@ -54,6 +48,10 @@ tail(sort(tapply(my_DF$Distance, my_DF$Dest, mean, na.rm=TRUE)))
 # for the smallest average distance
 head(sort(tapply(my_DF$Distance, my_DF$Dest, mean, na.rm=TRUE)))
 
+# find the min and max flight distance to SJU in miles
+min(my_DF$Distance[my_DF$Dest == "SJU"])
+max(my_DF$Distance[my_DF$Dest == "SJU"])
+
 
 # Make a plot of the average departure delays for each airport of
 # origin.
@@ -74,20 +72,30 @@ abline(h=mean(tapply(my_DF$DepDelay, my_DF$Origin, mean, na.rm=TRUE)))
 plot(sort(tapply(my_DF$DepDelay, my_DF$Origin, mean, na.rm=TRUE)))
 
 
-# Which airlines have the best average Arrival Delays?
-# Which airlines have the worst average Arrival Delays?
+# Which airline have the best average Arrival Delay?
+# Which airline have the worst average Arrival Delay?
 sort(tapply(my_DF$ArrDelay, my_DF$UniqueCarrier, mean, na.rm=TRUE))
 
-# Which airlines have the best average Departure Delays?
-# Which airlines have the worst average Departure Delays?
+# 
+
+# Which airline have the best average Departure Delay?
+# Which airline have the worst average Departure Delay?
 sort(tapply(my_DF$DepDelay, my_DF$UniqueCarrier, mean, na.rm=TRUE))
+
+#
 
 avgArrDly <- tapply(my_DF$ArrDelay, my_DF$UniqueCarrier, mean, na.rm=TRUE)
 plot(avgArrDly)
 axis(1, at = avgArrDly, labels = names(avgArrDly), las = 2)
 
+sort(avgArrDly)
+
 # and plot:
 plot(sort(tapply(my_DF$ArrDelay, my_DF$UniqueCarrier, mean, na.rm=TRUE)))
+
+# test for equal number of variables in each vector
+length(my_DF$ArrDelay)
+length(my_DF$UniqueCarrier)
 
 # How many flights occur per month
 table(my_DF$Month)
@@ -95,4 +103,72 @@ sort(tapply(my_DF$Month, my_DF$Month, length))
 
 # How many flights each carrier had in total
 sort(tapply(my_DF$UniqueCarrier, my_DF$UniqueCarrier, length))
-?tapply
+
+
+# Which day of the week should we fly, if we want to minimize
+# the expected arrival delay of the flight?
+sort(tapply(my_DF$ArrDelay, my_DF$DayOfWeek, mean, na.rm=TRUE))
+# Here 1 denotes Monday, 2 denotes Tuesday, ...., 7 denotes Sunday
+
+# Answering the dame question, but restricting attention
+# to flights that have IND as the destination airport.
+# We get the average arrival day of the flights,
+# for each day of the week, and restricting (only) to IND arrivals.
+tapply(my_DF$ArrDelay[my_DF$Dest == "IND"],
+       my_DF$DayOfWeek[my_DF$Dest == "IND"], mean, na.rm=TRUE)
+
+# Just double-checking that we are working on two vectors
+# that have the same lengths.
+length(my_DF$ArrDelay[my_DF$Dest == "IND"])
+length(my_DF$DayOfWeek[my_DF$Dest == "IND"])
+
+
+sum(my_DF$Dest == "IND")
+
+
+# On which day of the year were the expected ArrDelays the worst?
+myDates <- paste(my_DF$Month, my_DF$DayofMonth, my_DF$Year, sep="/")
+
+length(my_DF$ArrDelay)
+length(myDates)
+
+# This is a leap year, 3 values for the result.
+length(tapply(my_DF$ArrDelay, myDates, mean, na.rm=TRUE))
+
+# Here are all 366 days in 2008,
+# sorted according to the expected ArrDelay on that date.
+sort(tapply(my_DF$ArrDelay, myDates, mean, na.rm=TRUE))
+
+# The expected ArrDelay for each date,
+# but only for the flights that are arriving at IND.
+sort(tapply(my_DF$ArrDelay[my_DF$Dest == "IND"],
+            myDates[my_DF$Dest == "IND"], mean, na.rm=TRUE))
+
+# Checking that both vectors are the same length
+length(my_DF$ArrDelay[my_DF$Dest == "IND"])
+length(myDates[my_DF$Dest == "IND"])
+
+# Quiz 9, Question 1
+# to find which day of the year had the worst average departure delay times
+# for all flights from all airports
+
+# 1. vector: my_DF$DepDelay
+# 2. grouping: day of the year (myDates)
+# 3. function: mean
+
+tail(sort(tapply(my_DF$DepDelay, myDates, mean, na.rm=TRUE)))
+
+
+# Quiz 9, Question 2
+# to find which day of the year had the worst average departure delay times
+# for flights departing from O'Hare (ORD)
+
+# 1. vector: my_DF$DepDelay
+# 2. grouping: day of the year (myDates)
+# 3. function: mean
+# for index: [my_DF$Origin == "ORD"]
+
+tail(sort(tapply(my_DF$DepDelay[my_DF$Origin == "ORD"],
+                 myDates[my_DF$Origin == "ORD"], mean, na.rm=TRUE)))
+
+
