@@ -128,6 +128,9 @@ sum(my_DF$Dest == "IND")
 
 # On which day of the year were the expected ArrDelays the worst?
 myDates <- paste(my_DF$Month, my_DF$DayofMonth, my_DF$Year, sep="/")
+head(myDates)
+tail(myDates)
+
 
 length(my_DF$ArrDelay)
 length(myDates)
@@ -170,5 +173,60 @@ tail(sort(tapply(my_DF$DepDelay, myDates, mean, na.rm=TRUE)))
 
 tail(sort(tapply(my_DF$DepDelay[my_DF$Origin == "ORD"],
                  myDates[my_DF$Origin == "ORD"], mean, na.rm=TRUE)))
+
+
+
+# We can extend that example,
+# now specify that the Dest airport is IND
+# and that the Origin airport is ORD
+
+head(my_DF$Dest == "IND")
+head(my_DF$Origin == "ORD")
+
+# This is a vestor that indentifies the flights
+# which have Ind as Dest and have ORD as Origin
+# It is a vector of 7 million TRUE's and FALSE's.
+ordtoind <- my_DF$Dest == "IND" & my_DF$Origin == "ORD"
+
+# We find the expected delay for flights from ORD to IND,
+# categorized according to the date.
+sort(tapply(my_DF$ArrDelay[ordtoind],
+            myDates[ordtoind], mean, na.rm=TRUE) > 90)
+
+# table: TRUE's & FALSE's
+table(sort(tapply(my_DF$ArrDelay[ordtoind],
+            myDates[ordtoind], mean, na.rm=TRUE) > 30))
+
+# Quiz 10
+# Flight from ATL to LAX in 2008.
+# How many deys of the year were the average DepDelays
+# MORE than 90 minuites?
+
+# 1. vector: my_DF$DepDelay
+# 2. grouping: day of the year (myDates)
+# 3. function: mean
+# for index: [my_DF$Origin == "ATL"] & [my_DF$Dest == "LAX"]
+
+# Flights originating in ATL and arriving in LAX
+ATLtoLAX <- my_DF$Origin == "ATL" & my_DF$Dest == "LAX"
+
+# sorting for ATL to LAX by average DEpDelay
+tail(sort(tapply(my_DF$DepDelay[ATLtoLAX],
+                 myDates[ATLtoLAX], mean, na.rm=TRUE)))
+
+# for average DepDelays greater than 90 mins
+sum(tapply(my_DF$DepDelay[ATLtoLAX],
+            myDates[ATLtoLAX], mean, na.rm=TRUE) > 90)
+
+# Steve Cotton's solution:
+table(tapply(my_DF$DepDelay[ATLtoLAX],
+       myDates[ATLtoLAX], mean, na.rm=TRUE) > 90)
+
+# DepDelays between 30 and 60 minuites for flights from ATL to LAX
+table((tapply(my_DF$DepDelay[ATLtoLAX],
+              myDates[ATLtoLAX], mean, na.rm=TRUE) > 30) &
+          (tapply(my_DF$DepDelay[ATLtoLAX],
+                  myDates[ATLtoLAX], mean, na.rm=TRUE) <60))
+
 
 
