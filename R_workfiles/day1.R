@@ -8,6 +8,24 @@
 # Importing the data into a dataframe (variable)
 my_DF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro_to_R_for_Data_Science/datasets/2008.csv")
 
+# Create a subset of my_DF with Origin; JFK and Dest; LAX
+jfk_lax <- subset(my_DF, (my_DF$Origin == "JFK") & (my_DF$Dest == "LAX"))
+    # 8078 obs, 29 var
+
+
+head(jfk_lax)
+tail(jfk_lax)
+dim(jfk_lax)
+
+str(jfk_lax)
+str(my_DF)
+
+# Create a csv file of the (subset) new data frame
+write.csv(jfk_lax, file = "../datasets/jfk-lax_2008/jfkTolax2008.csv", na = "NA")
+
+head(jfk_lax)
+tail(jfk_lax)
+
 # printing to console the first 6 lines of the dataset
 head(my_DF)
 
