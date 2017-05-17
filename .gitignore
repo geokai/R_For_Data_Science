@@ -1,4 +1,4 @@
-# OS Stuff
+# OS Stuff:
 .DS_Store
 
 # Directories:
@@ -12,3 +12,4 @@ dl_datasets/
 *.mpy
 *.pyc
 .Rhistory
+.RData
