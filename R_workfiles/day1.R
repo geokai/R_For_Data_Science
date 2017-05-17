@@ -6,7 +6,7 @@
 
 
 # Importing the data into a dataframe (variable)
-my_DF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro_to_R_for_Data_Science/datasets/2008.csv")
+my_DF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro_to_R_for_Data_Science/dl_datasets/2008.csv")
 
 # Create a subset of my_DF with Origin; JFK and Dest; LAX
 jfk_lax <- subset(my_DF, (my_DF$Origin == "JFK") & (my_DF$Dest == "LAX"))
