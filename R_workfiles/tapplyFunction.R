@@ -128,12 +128,6 @@ sum(my_DF$Dest == "IND")
 
 # On which day of the year were the expected ArrDelays the worst?
 myDates <- paste(my_DF$Month, my_DF$DayofMonth, my_DF$Year, sep="/")
-head(myDates)
-tail(myDates)
-
-
-length(my_DF$ArrDelay)
-length(myDates)
 
 # This is a leap year, 3 values for the result.
 length(tapply(my_DF$ArrDelay, myDates, mean, na.rm=TRUE))
@@ -161,7 +155,6 @@ length(myDates[my_DF$Dest == "IND"])
 
 tail(sort(tapply(my_DF$DepDelay, myDates, mean, na.rm=TRUE)))
 
-
 # Quiz 9, Question 2
 # to find which day of the year had the worst average departure delay times
 # for flights departing from O'Hare (ORD)
@@ -172,7 +165,7 @@ tail(sort(tapply(my_DF$DepDelay, myDates, mean, na.rm=TRUE)))
 # for index: [my_DF$Origin == "ORD"]
 
 tail(sort(tapply(my_DF$DepDelay[my_DF$Origin == "ORD"],
-                 myDates[my_DF$Origin == "ORD"], mean, na.rm=TRUE)))
+                 myDates[my_DF$Origin == "ORD"], mean, na.rm=TRUE)), 10)
 
 
 
