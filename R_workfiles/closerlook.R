@@ -187,9 +187,48 @@ sum(v == w)
 # and the x-axis looks better than it did the first time
 # that we visited this question
 plot(w)
-
+plot(v, las = 2)
 #
 #
+v
+w
 
+# We can break the data in DepDelay vector
+# according to which city or origin or according to the month
+tapply(my_DF$DepDelay, my_DF$Origin, length)
+tapply(my_DF$DepDelay, my_DF$Month, length)
+
+# We now know how many flights occur from each airport in each month
+tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month), length)
+
+# We can extract the data from a particular row (i.e., origin airport)
+# and from a particular column (i.e., the month)
+tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month), length)["IND",6]
+tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month), length)["ATL",3]
+
+# notice that we need to give two dimensions when we extract data from a matrix
+# we need to specify both the row and the column
+
+# Here is the number of flights from three particular airports
+# during the months 7, 8,9,10 (July through October)
+tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month),
+       length)[c("ATL","AUS","BDL"), c(7,8,9,10)]
+# same effect, just writting 7:10 to get the vector c(7,8,9,10)
+tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month),
+       length)[c("ATL","AUS","BDL"), 7:10]
+
+
+# how many flights departed altogether from ATL, AUS & BDL during
+# the months of July 2008 through October 2008?
+sum(tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month),
+       length)[c("ATL","AUS","BDL"), 7:10])
+
+
+# Leaving a specification blank:
+# create a table with 3 rows (ATL, ORD & DFW)
+# showing monthly counts of flights departing from each
+# airport during 2008
+tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month),
+       length)[c("ATL","ORD","DFW"),]
 
 

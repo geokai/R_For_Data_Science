@@ -172,7 +172,7 @@ cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab = 4, labels = NULL)
 table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab = 4))
 # Here is the coresponding plot
 # and we will improve the way the x-axis looks later
-# 'las = 2' rotates the axos lables through 90 degrees
+# 'las = 2' rotates the axis lables through 90 degrees
 plot(table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab=4)), las = 2)
 
 #head(my_DF$Origin)
