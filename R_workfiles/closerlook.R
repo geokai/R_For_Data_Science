@@ -231,4 +231,128 @@ sum(tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month),
 tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month),
        length)[c("ATL","ORD","DFW"),]
 
+# We can check that the result is a matrix
+class(tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month), length)[c("IND","ORD"), ])
+
+
+# how big is the matrix? should be 2-by-12
+dim(tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month), length)[c("IND","ORD"), ])
+
+
+# Calculating Percentages of Flights with Long Delays
+
+# We make a data frame with all of the flights that are
+# delayed more than 30 minutes when departing
+longdelayDF <- subset(my_DF, my_DF$DepDelay > 30)
+dim(longdelayDF)
+
+# double-check
+head(longdelayDF$DepDelay)
+
+# The counts of all of the flights, from ORD or IND, according to month
+tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month), length)[c("IND","ORD"), ]
+
+# same thing, but now for the flights with delays or more than 30 minutes
+tapply(longdelayDF$DepDelay, list(longdelayDF$Origin,longdelayDF$Month), length)[c("IND","ORD"), ]
+
+# We can divide wntry by entry , to get the percentage of flights
+# that have really long delays (more than 30 minutes) from IND or ORD
+# broken up, month by month
+M2 <- tapply(my_DF$DepDelay, list(my_DF$Origin,my_DF$Month), length)[c("IND","ORD"), ]      # the larger
+M1 <- tapply(longdelayDF$DepDelay, list(longdelayDF$Origin,longdelayDF$Month), length)[c("IND","ORD"), ]    # the smaller
+
+# here is the division; it yields the percentage of flights with long delays
+M1/M2
+
+# We can plot this with a dotchart
+?dotchart
+dotchart(M1/M2)
+
+# M3 has the percentages of flights with long delays from IND or ORD, month-by-month
+M3 <- M1/M2
+dotchart(M3)
+M3
+M3["ORD", ] - M3["IND", ] > 0
+
+# Quiz 15
+
+# 1
+# How Many flights departed altogether from IND or ORD in 2008 with
+# a delay of more than 30 minutes each? * Use 'sum()' function
+sum(tapply(longdelayDF$DepDelay, list(longdelayDF$Origin,longdelayDF$Month), length)[c("IND","ORD"), ])
+
+#2
+# In which month of 2008 was the percentage of long delays (i.e., flights with more than 30 minutes delays) the highest
+# all flights for each month, sorted with decending order
+# all flights departure delays more than 30 min divided by all flights departure delays to yield the percentage delay
+# then sort in ascending/descending order
+sort(tapply(longdelayDF$DepDelay, longdelayDF$Month, length) / tapply(my_DF$DepDelay, my_DF$Month, length), decreasing = TRUE)
+# (This one stumped me - had to look at the comments, must sort this out *)
+
+
+# Analyzing Flights by Time of Day for Departure
+
+# Break the day into 4 parts:
+# early morning (1) corresponds to times midnight to 6 AM
+# late morning (2) corrsponds to times 6 AM to 12 noon
+# early evening (3) corrsponds to times 12 noon to 6 PM
+# late evening (4) corrsponds to times 6 PM to 12 midnight
+v <- ceiling(my_DF$DepTime/600)
+
+# build a vector called parts of day
+# initially we put 7000000 NA values inside
+partsofday <- rep(NA, times=dim(my_DF)[1])
+head(partsofday)
+length(partsofday)
+
+partsofday[v == 1] <- "early morning"   # 00:00 - 06:00
+partsofday[v == 2] <- "late morning"    # 06:00 - 12:00
+partsofday[v == 3] <- "early evening"   # 12:00 - 18:00
+partsofday[v == 4] <- "late evening"    # 18:00 - 00:00
+
+table(partsofday)
+
+# double-check that the length of partsofday vector is the same
+# as the number of rows in the data frame my_DF
+length(partsofday)
+dim(my_DF)
+
+# and then we can create a new column in the my_DF data frame called "timeofday"
+# and we can store this information we just found into this column
+my_DF$timeofday <- partsofday
+
+# now our data frame my_DF has 30 columns instead of 29 columns
+dim(my_DF)
+
+# just check to make sure that the first 6 flights were done properly
+head(my_DF$timeofday)
+head(my_DF$DepTime)
+
+tail(my_DF$timeofday)
+tail(my_DF$DepTime)
+
+
+# Quiz 16
+
+# How many flights departed from IND early in the morning?
+
+sum((my_DF$timeofday == "early morning") & (my_DF$Origin == "IND"), na.rm = TRUE)
+# (derived from comments *)
+
+
+# Analyzing Flights by Time of Day for Departure and Origin Airport
+
+# We can tabulate how many flights occur, by splitting the flights according to
+# both the city of origin and also the time of day when the flight departed
+tapply(my_DF$DepDelay, list(my_DF$Origin, my_DF$timeofday), length)
+
+# We get matrix with all of the results
+class(tapply(my_DF$DepDelay, list(my_DF$Origin, my_DF$timeofday), length))
+dim(tapply(my_DF$DepDelay, list(my_DF$Origin, my_DF$timeofday), length))
+# We have a matrix with 303 rows (one row per city)
+# and four columns (one column per time of day)
+
+# We can restrict attention to the flights that departed from IND, CVG, or JFK
+tapply(my_DF$DepDelay, list(my_DF$Origin, my_DF$timeofday), length)[c("IND","CVG","JFK"), ]
+# Here we did not specify the columns, so as a result, we get all four possible columns
 
