@@ -267,8 +267,116 @@ length(sapply(state.abb,function(x) dim(activeairports(x))[1]))
 dim(activeairports("IN"))[1]
 
 
+# 4.14 Incorporating Tail Numbers
+
+# concider the distance flown by the planes (this is the 'data' in the tapply),
+# split up according to the tailnum of the planes themselves (this is the way to split),
+# and the function we use, within each group of distances, is the 'sum'
+head(sort(tapply(mynew_DF$Distance, mynew_DF$TailNum, sum)))
+tail(sort(tapply(mynew_DF$Distance, mynew_DF$TailNum, sum)))
+
+# here is an admittedly terrible plot of this
+dotchart(sort(tapply(mynew_DF$Distance, mynew_DF$TailNum, sum)))
+
+# we dive in further
+v <- sort(tapply(mynew_DF$Distance, mynew_DF$TailNum, sum))
+head(v)
+v <- tail(v, 23)
+
+# now v has the information about the 23 flights that flew the most miles
+v
+
+# but the last 3 are erroneous, so lets remove them
+v <- v[1:20]
+
+# these are the most travelled 20 airplanes
+v
+
+# create a new data frame for  plane info
+planeDF <- read.csv("/Users/geomatus3/1.Projects/•FutureLearn/Intro_to_R_for_Data_Science/dl_datasets/plane-data.csv")
+head(planeDF, n=200)
+
+names(v)
+subset(planeDF, tailnum %in% names(v))
 
 
+# 4.15
+# Quiz 21
+# How many flights did the airplane with tail number N556AS make
+# during 2006 to 2008?
+
+# the long (and possibly missleading) way
+tapply(mynew_DF$Origin, mynew_DF$TailNum == "N556AS", length)
+#    FALSE       TRUE
+# 21599794       5071
+
+# probably the right way
+sum(mynew_DF$TailNum == "N556AS")
+# [1] 5071
+
+
+# 4.16 
+# Changing Month Numbers to Month Names
+
+# reality check: there should be this many days during 2006 to 2008
+365+365+366
+# remember 2008 is a leap year
+
+# handy: we have the month abbreviations stored in R in month.abb
+month.abb
+
+# we can use numbers from 1 to 12 as indices into this vector
+month.abb[c(9,9,1,2,3,9,12,1,1,1,6,6,7)]
+
+# the first six flights in our data frame mynew_DF are all from Jan
+# (2006, but we do not see th e year information here)
+head(month.abb[mynew_DF$Month])
+# the last six flights are from Dec (2008, but we do not see it here)
+tail(month.abb[mynew_DF$Month])
+
+# here are the dates of flights, in international format
+head(paste(mynew_DF$DayofMonth, month.abb[mynew_DF$Month], mynew_DF$Year))
+tail(paste(mynew_DF$DayofMonth, month.abb[mynew_DF$Month], mynew_DF$Year))
+    
+mydates <- paste(mynew_DF$DayofMonth, month.abb[mynew_DF$Month], mynew_DF$Year)
+
+# we saved a vector more than 21 million dates corresponding to 21 million+ flights
+length(mydates)
+
+# use tapply
+# with the departure delays as the data
+# and split the data up according to the value of mydates
+# and the function we take (within each day) on the data is the "mean"
+# of course we throw away the NA values
+tapply(mynew_DF$DepDelay, mydates, mean, na.rm=TRUE)
+
+# these are the days with the smallest average departure delays
+head(sort(tapply(mynew_DF$DepDelay, mydates, mean, na.rm=TRUE)))
+
+# these are the days with the longest average departure delays
+tail(sort(tapply(mynew_DF$DepDelay, mydates, mean, na.rm=TRUE)))
+
+# here are the worst 20 days in terms of the average departure delays
+tail(sort(tapply(mynew_DF$DepDelay, mydates, mean, na.rm=TRUE)), n=20)
+
+
+# 4.17
+# Quiz 22
+# Which date during the period 2006-2008 had the most flights?
+
+# create new column with the full date format using mydates
+mynew_DF$FullDate <- mydates
+# to confirm success:
+head(mynew_DF)
+tail(mynew_DF)
+
+# looking at departures (Origin) and grouping by fulldate, with sum to give the number of flights - remove NAs
+tail(sort(tapply(mynew_DF$Origin, mynew_DF$FullDate, length)))
+# 21780 flights on 7 July 2007
+
+# the least number of flights were on:
+head(sort(tapply(mynew_DF$Origin, mynew_DF$FullDate, length)))
+# 12008 flights on 27 November 2008
 
 
 
