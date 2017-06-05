@@ -12,4 +12,4 @@ dl_datasets/
 *.mpy
 *.pyc
 .Rhistory
-.RData
+*.RData
