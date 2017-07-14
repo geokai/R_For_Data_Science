@@ -2,10 +2,11 @@
 .DS_Store
 
 # Directories:
-2008\ posters
+2008_posters
 Course_content
 KB_Shrt_Cuts_Notes/
 dl_datasets/
+week2project/datasets/
 
 # Files:
 #*.csv
