@@ -114,6 +114,39 @@ dim(atl_lax)    # 5406
 # among the flights from ATL to LAX in 2008, how many departed before 12 noon?
 sum(atl_lax$DepTime < 1200, na.rm=TRUE)     # 2133
 
+# Build a table that shows how many cities are the origin
+# for the flights throughout 2008
+table(my_DF$Origin)
+sort(table(my_DF$Origin))
+# Sort the result, and see that Atlanta is most often used
+# as a city of origin for flights.
+# top 10 airports with the most departure flights
+head(sort(table(my_DF$Origin), decreasing = TRUE), n=10)
 
+# here are some sample departure times
+head(my_DF$DepTime)
+# we might want to break them up into these categories
+seq(0, 2400, by=100)
+cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab=4)
+# table agregates the flights into by hour
+# Enumerates the number of flights that departed within 
+# each hour range during the course of the day
+table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab=4))
+
+plot(table(cut(my_DF$DepTime, breaks=seq(0, 2400, by=100), dig.lab=4)))
+
+head(my_DF$Origin)
+head(my_DF$Dest)
+head(paste(my_DF$Origin, "to", my_DF$Dest))
+# Make a table of all the origin-to-destination pairs
+# then sort the table, and find which are the most popular
+# such pairs, by examining only the tail
+# Here are the most popular 20 such pairs.
+tail(sort(table(paste(my_DF$Origin, "to", my_DF$Dest))), 20)
+
+# quiz 6
+#
+sum(table(paste(my_DF$Origin, "to", my_DF$Dest)) == 1)
+# 285
 
 
